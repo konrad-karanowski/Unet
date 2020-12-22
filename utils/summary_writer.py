@@ -1,3 +1,4 @@
+import torch
 from typing import Optional, NoReturn
 from torchsummary import summary
 
@@ -24,7 +25,7 @@ class SummaryWriter:
         print(msg)
 
     @staticmethod
-    def write_model_summary(device, model) -> NoReturn:
+    def write_model_summary(device: torch.device, model: torch.nn.Module) -> NoReturn:
         """
         Write summary of model using torchsummary library
         :param device: using device
@@ -34,3 +35,7 @@ class SummaryWriter:
         print(f'Used device: {device}')
         print(f'Model summary: ')
         summary(model, model.input_size)
+
+    @staticmethod
+    def write_early_stopping(epochs: int) -> NoReturn:
+        print(f'Early stopping after {epochs} epochs.')

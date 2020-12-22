@@ -136,4 +136,3 @@ $ python predict.py -c 3 -g True -m callbacks/model.pth -i image.png -o .
 
 ### Todos
  - Change SummaryWriter class
- - Create early-stopping mode

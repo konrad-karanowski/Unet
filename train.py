@@ -48,6 +48,12 @@ def get_args():
                         default=False,
                         help='Whether the pictures should be converted to gray (True) or coloured (False)',
                         dest='as_gray')
+    parser.add_argument('-p',
+                        '--patience',
+                        type=int,
+                        default=None,
+                        help='How many epochs to tolerate no improvement.',
+                        dest='patience')
     return parser.parse_args()
 
 
@@ -60,7 +66,8 @@ def main():
         args.momentum,
         args.n_callbacks,
         args.model_path,
-        args.as_gray
+        args.as_gray,
+        args.patience
     )
 
 
