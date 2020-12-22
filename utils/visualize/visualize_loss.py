@@ -2,7 +2,7 @@ from typing import NoReturn
 import matplotlib.pyplot as plt
 
 
-N_ROWS = 4
+N_ROWS = 3
 N_COLS = 2
 
 

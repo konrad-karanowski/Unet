@@ -29,12 +29,3 @@ def dice_metric(intersection: torch.Tensor, union: torch.Tensor) -> torch.Tensor
     """
     dice = (2 * intersection + 1e-8) / (intersection + union + 1e-8)
     return dice.mean()
-
-
-def alternative_loss(dice: torch.Tensor) -> torch.Tensor:
-    """
-    Calculate alternative loss calculated as 1 - dice
-    :param dice: dice metric
-    :return: alternative loss
-    """
-    return 1 - dice

@@ -1,4 +1,3 @@
-import torch
 from typing import NoReturn
 
 from utils.metrics.metrics import *
@@ -23,8 +22,6 @@ class MetricWriter:
             'validate_iou': [],
             'train_dice': [],
             'validate_dice': [],
-            'train_alternative_loss': [],
-            'validate_alternative_loss': []
         }
 
         self.__epoch_metrics = {
@@ -34,8 +31,6 @@ class MetricWriter:
             'validate_iou': [],
             'train_dice': [],
             'validate_dice': [],
-            'train_alternative_loss': [],
-            'validate_alternative_loss': []
         }
 
     def add_train_loss(self, loss: torch.Tensor) -> NoReturn:
@@ -55,16 +50,14 @@ class MetricWriter:
         self.__epoch_metrics['validate_loss'].append(loss)
 
     def calculate_train_metrics(self, output: torch.Tensor, target: torch.Tensor) -> NoReturn:
-        iou, dice, alt_loss = self.__calculate_metrics(output, target)
+        iou, dice = self.__calculate_metrics(output, target)
         self.__epoch_metrics['train_iou'].append(iou)
         self.__epoch_metrics['train_dice'].append(dice)
-        self.__epoch_metrics['train_alternative_loss'].append(alt_loss)
 
     def calculate_test_metrics(self, output: torch.Tensor, target: torch.Tensor):
-        iou, dice, alt_loss = self.__calculate_metrics(output, target)
+        iou, dice = self.__calculate_metrics(output, target)
         self.__epoch_metrics['validate_iou'].append(iou)
         self.__epoch_metrics['validate_dice'].append(dice)
-        self.__epoch_metrics['validate_alternative_loss'].append(alt_loss)
 
     def close_epoch(self) -> (float, float):
         """
@@ -77,8 +70,7 @@ class MetricWriter:
             result.clear()
         return self.train_loss[-1], self.validate_loss[-1]
 
-    def __calculate_metrics(self, output: torch.Tensor,
-                            target: torch.Tensor) -> (torch.Tensor, torch.Tensor, torch.Tensor):
+    def __calculate_metrics(self, output: torch.Tensor, target: torch.Tensor) -> (torch.Tensor, torch.Tensor):
         """
         Calculate metrics and returns it
         :param output: output of the model
@@ -87,8 +79,7 @@ class MetricWriter:
         """
         iou, intersection, union = fuzzy_iou(output, target)
         dice = dice_metric(intersection, union)
-        alt_loss = alternative_loss(dice)
-        return iou, dice, alt_loss
+        return iou, dice
 
     @property
     def metrics(self) -> dict:

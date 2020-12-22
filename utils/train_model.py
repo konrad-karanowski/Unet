@@ -1,7 +1,6 @@
 import os
 from typing import NoReturn, List
 import torch
-from torch import nn
 
 from utils.model import setup_model
 from utils.dataset import TrainDataset, TrainLoader
@@ -9,7 +8,7 @@ from utils.dataset import TrainDataset, TrainLoader
 
 from utils.visualize import visualize_loss
 from utils.summary_writer import SummaryWriter
-from utils.metrics import MetricWriter
+from utils.metrics import MetricWriter, DiceLoss
 
 
 def setup_dataset(batch_size: int, as_gray: bool) -> (TrainLoader, TrainLoader, List[str]):
@@ -48,7 +47,7 @@ def train_model(num_epochs: int, batch_size: int, lr: float, momentum: float,
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     # TODO Change criterion (?)
-    criterion = nn.BCELoss()
+    criterion = DiceLoss()
     optimizer = torch.optim.RMSprop(model.parameters(), lr=lr, weight_decay=1e-8, momentum=momentum)
     # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min' if num_classes > 1 else 'max', patience=2)
     model.to(device)
