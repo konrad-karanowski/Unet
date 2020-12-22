@@ -97,6 +97,7 @@ def plot_image(img: np.ndarray, predicted: np.ndarray, save_path: str or None) -
     :return: NoReturn
     """
     img = apply_masks(img, predicted, COLORS, alpha=0.5)
+    plt.figure(frameon=False)
     plt.imshow(img)
     plt.xticks([])
     plt.yticks([])

@@ -2,7 +2,11 @@
 
 Unet is powerful image segmentation algorithm. In the beginning it was mainly use for segmentation of histopathological images.
 Checkout this [paper](https://arxiv.org/pdf/1505.04597.pdf). 
-Our version is slightly different, as the input and output has the same size (256x256).
+Mine version is slightly different, as the input and output has the same size (256x256).
+
+![example](https://user-images.githubusercontent.com/55788735/102884000-280e5600-4451-11eb-9afa-6a4afd91c036.png)
+
+
 
 ### Installation
 
@@ -19,6 +23,7 @@ Masks are binary images with only two values: 0 and 1. 1 means, that certain pix
 Example data set structure may look as follows: 
 
 ```sh
+    ├───callbacks
     ├───data
     ├───train
     │   ├───inputs
@@ -41,6 +46,14 @@ Example data set structure may look as follows:
                 └─── test0.png
 ```
 
+### Create background
+Sometimes, you want to have background as separate class. Luckily, you don't have to create this by hand. To create background class for all your images in *data* folder, just use this script:
+
+```sh
+$ python create_background.py
+```
+
+If there is no *background* folder in *train/masks* and/or *validate/masks*, it will be created for you. Background is everything that masks do not cover.
 
 ### How to train model
 
@@ -77,15 +90,14 @@ For example, I want to train completely new model in 100 epochs, save weights ev
 $ python train.py -e 100 -c 5 -lr 0.001 -g True
 ```
 
-At the end of training, program will always save final model. All callbacks will be stored as [model state dicts](https://pytorch.org/tutorials/beginner/saving_loading_models.html) in folder *callbacks*.
+At the end of training, program will always save final model. All callbacks will be stored as [model state dicts](https://pytorch.org/tutorials/beginner/saving_loading_models.html) in folder *callbacks* (watch "Data structure").
 
 
 ### Metrics
 Metrics of model performance are:
-- loss function value - BinaryCrossEntropy
 - fuzzy version of IoU - ratio of the intersection to the union
 - dice coefficient - F1 score for image segmentation
-- alternative loss = 1 - dice coefficient
+- loss function value - Dice loss (1 - dice coefficient)
 
 Great video explaining this metrics: [click](https://www.youtube.com/watch?v=AZr64OxshLo&t=797s).
 
@@ -123,6 +135,5 @@ $ python predict.py -c 3 -g True -m callbacks/model.pth -i image.png -o .
 ```
 
 ### Todos
-
  - Change SummaryWriter class
  - Create early-stopping mode
