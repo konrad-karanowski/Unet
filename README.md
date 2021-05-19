@@ -133,6 +133,3 @@ For example I want to use my final model from last training (stored as *model.pt
 ```
 $ python predict.py -c 3 -g True -m callbacks/model.pth -i image.png -o .
 ```
-
-### Todos
- - Change SummaryWriter class
